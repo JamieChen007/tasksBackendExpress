@@ -40,7 +40,7 @@ tasksRouter.get("/tasks/:id", (req, res) => {
     return res.status(404).send("task not found");
   }
 
-  res.send(filterTask);
+  res.send(filterTask[0]);
 });
 
 // 3.PUT /tasks/:id update task by id
@@ -61,10 +61,11 @@ tasksRouter.put("/tasks/:id", (req, res) => {
 
   tasks[foundIndex].description = description;
   tasks[foundIndex].done = done;
-  res.send({
-    msg: "Task update success",
-    updatedTask: tasks[foundIndex],
-  });
+  //   res.send({
+  //     msg: "Task update success",
+  //     updatedTask: tasks[foundIndex],
+  //   });
+  res.send(tasks[foundIndex]);
 });
 
 // 4.POST/tasks create a new task
@@ -83,10 +84,11 @@ tasksRouter.post("/tasks", (req, res) => {
 
   tasks.push(newTask);
 
-  res.send({
-    msg: "Task create success",
-    createdTask: newTask,
-  });
+  //   res.send({
+  //     msg: "Task create success",
+  //     createdTask: newTask,
+  //   });
+  res.send(newTask);
 });
 
 // 5.DELETE /tasks/:id delete task by id
@@ -104,10 +106,11 @@ tasksRouter.delete("/tasks/:id", (req, res) => {
 
   const deletedTask = tasks.splice(foundIndex, 1);
 
-  res.send({
-    msg: "Task delete success",
-    deletedTask: deletedTask[0],
-  });
+  //   res.send({
+  //     msg: "Task delete success",
+  //     deletedTask: deletedTask[0],
+  //   });
+  res.send(deletedTask[0]);
 });
 
 module.exports = tasksRouter;
