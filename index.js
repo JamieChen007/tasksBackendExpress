@@ -14,14 +14,12 @@ const app = express();
 
 //   if (req.method == "OPTIONS") {
 //     res.send(200);
-//     /让options请求快速返回/;
 //   } else {
 //     next();
 //   }
 // });
 
 // app.all("/login", (request, response) => {
-//   //允许跨域
 //   response.setHeader("Access-Control-Allow-Origin", "*");
 //   response.setHeader("Access-Control-Allow-Headers", "*");
 //   response.send("Hello");
