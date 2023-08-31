@@ -15,14 +15,28 @@ const tasks = [
   },
   {
     id: 3,
-    description: "task 3",
+    description: "task3",
     done: false,
   },
 ];
 
-// 1.GET /tasks get all tasks (allow query params for filtering)
+//1.GET /tasks get all tasks (allow query params for filtering)
+//tasks?description=xxx
 tasksRouter.get("/tasks", (req, res) => {
-  res.send(tasks);
+  const { description } = req.query;
+  if (!description) {
+    res.send(tasks);
+    return;
+    // return res.status(400).send("Description parameter is missing");
+  }
+  const foundItems = tasks.filter((task) => {
+    return task.description.includes(description);
+  });
+  //   if (!foundItems.length) {
+  //     // return res.status(404).send("Task not found");
+  //     return res.send(foundItems);
+  //   }
+  return res.send(foundItems);
 });
 
 // 2.GET /tasks/:id get task by id
