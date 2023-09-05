@@ -1,7 +1,3 @@
-const express = require("express");
-
-const tasksRouter = express.Router();
-
 const tasks = [
   {
     id: 1,
@@ -20,27 +16,21 @@ const tasks = [
   },
 ];
 
-//1.GET /tasks get all tasks (allow query params for filtering)
-//tasks?description=xxx
-tasksRouter.get("/tasks", (req, res) => {
+let i = 4;
+
+const getTasks = (req, res) => {
   const { description } = req.query;
   if (!description) {
-    res.send(tasks);
+    res.json(tasks);
     return;
-    // return res.status(400).send("Description parameter is missing");
   }
   const foundItems = tasks.filter((task) => {
     return task.description.includes(description);
   });
-  //   if (!foundItems.length) {
-  //     // return res.status(404).send("Task not found");
-  //     return res.send(foundItems);
-  //   }
-  return res.send(foundItems);
-});
+  return res.json(foundItems);
+};
 
-// 2.GET /tasks/:id get task by id
-tasksRouter.get("/tasks/:id", (req, res) => {
+const getTasksById = (req, res) => {
   const id = +req.params.id;
   if (isNaN(id)) {
     res.status(400).send("id must be number");
@@ -54,11 +44,10 @@ tasksRouter.get("/tasks/:id", (req, res) => {
     return res.status(404).send("task not found");
   }
 
-  res.send(filterTask[0]);
-});
+  res.json(filterTask[0]);
+};
 
-// 3.PUT /tasks/:id update task by id
-tasksRouter.put("/tasks/:id", (req, res) => {
+const updateTask = (req, res) => {
   const id = +req.params.id;
   if (isNaN(id)) {
     res.status(400).send("id must be number");
@@ -72,18 +61,13 @@ tasksRouter.put("/tasks/:id", (req, res) => {
   if (foundIndex === -1) {
     return res.status(404).send("task not found");
   }
-
   tasks[foundIndex].description = description;
   tasks[foundIndex].done = done;
-  //   res.send({
-  //     msg: "Task update success",
-  //     updatedTask: tasks[foundIndex],
-  //   });
-  res.send(tasks[foundIndex]);
-});
 
-// 4.POST/tasks create a new task
-tasksRouter.post("/tasks", (req, res) => {
+  res.json(tasks[foundIndex]);
+};
+
+const createTask = (req, res) => {
   const { description } = req.body;
   if (description === undefined) {
     res.status(400).send("Description must be filled");
@@ -91,22 +75,19 @@ tasksRouter.post("/tasks", (req, res) => {
   }
 
   const newTask = {
-    id: tasks[tasks.length - 1].id + 1,
+    id: i,
     description: description,
     done: false,
   };
 
+  i++;
+
   tasks.push(newTask);
 
-  //   res.send({
-  //     msg: "Task create success",
-  //     createdTask: newTask,
-  //   });
-  res.send(newTask);
-});
+  res.json(newTask);
+};
 
-// 5.DELETE /tasks/:id delete task by id
-tasksRouter.delete("/tasks/:id", (req, res) => {
+const deleteTask = (req, res) => {
   const id = +req.params.id;
   if (isNaN(id)) {
     res.status(400).send("id must be number");
@@ -120,11 +101,13 @@ tasksRouter.delete("/tasks/:id", (req, res) => {
 
   const deletedTask = tasks.splice(foundIndex, 1);
 
-  //   res.send({
-  //     msg: "Task delete success",
-  //     deletedTask: deletedTask[0],
-  //   });
-  res.send(deletedTask[0]);
-});
+  res.json(deletedTask[0]);
+};
 
-module.exports = tasksRouter;
+module.exports = {
+  getTasks,
+  getTasksById,
+  updateTask,
+  createTask,
+  deleteTask,
+};
